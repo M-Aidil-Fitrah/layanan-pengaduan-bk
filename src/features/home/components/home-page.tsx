@@ -1,15 +1,118 @@
 import { SiteHeader } from "@/components/layout/site-header";
+import { CategoryGrid } from "@/features/complaints/components/category-grid";
 import { ComplaintForm } from "@/features/complaints/components/complaint-form";
-import { complaintCategories } from "@/features/complaints/constants";
+import { ComplaintJourneyProvider } from "@/features/complaints/components/complaint-journey-context";
+import { TrackingForm } from "@/features/complaints/components/tracking-form";
 
-const steps = [["01", "Isi formulir", "Jelaskan masalahmu dengan kata-kata yang nyaman bagimu."], ["02", "Simpan kode", "Setelah terkirim, simpan kode pelacakan yang kamu terima."], ["03", "Lacak status", "Gunakan kode untuk melihat perkembangan yang tersedia."]] as const;
+const steps = [
+  ["01", "Pilih topik", "Mulai dari kategori yang paling mendekati situasimu."],
+  ["02", "Ceritakan secukupnya", "Bagikan hal yang relevan, dengan atau tanpa identitas."],
+  ["03", "Simpan kode", "Gunakan kode pribadi untuk memeriksa status yang tersedia."],
+] as const;
 
 export function HomePage() {
-  return <><SiteHeader /><main>
-    <section className="hero" id="utama"><div className="container hero-grid"><div><p className="eyebrow">RUANG AMAN UNTUK BERCERITA</p><h1>Kamu tidak harus menghadapi semuanya sendiri.</h1><p className="lead">Sampaikan keluhan, masalah, atau kesulitan yang kamu alami. Layanan Bimbingan dan Konseling siap mendengarkan dan membantu menemukan langkah yang tepat.</p><div className="actions"><a className="button" href="#pengaduan">Buat pengaduan →</a><a className="text-link" href="#cara-kerja">Pelajari alurnya ↓</a></div><p className="privacy-line">◌ <strong>Privasimu dihormati.</strong> Kamu dapat memilih untuk tidak mencantumkan nama dan kontak.</p></div><div className="hero-art" aria-label="Ilustrasi percakapan suportif"><div className="bubble top">Kamu berharga.</div><div className="figures"><i /><i /></div><div className="bubble bottom">Kami siap mendengarkan.</div></div></div></section>
-    <section className="section" id="layanan"><div className="container"><header className="section-heading"><div><p className="eyebrow">PILIH TOPIK</p><h2>Hal apa yang ingin kamu sampaikan?</h2></div><p>Setiap cerita berbeda. Pilih topik yang paling mendekati situasimu untuk memulai.</p></header><div className="category-grid">{complaintCategories.map((category) => <a className="category-card" href="#pengaduan" key={category.value}><span>{category.icon}</span><h3>{category.label}</h3><p>{category.description}</p><small>Pilih topik →</small></a>)}</div></div></section>
-    <section className="section muted" id="cara-kerja"><div className="container steps"><div><p className="eyebrow">CARA KERJA</p><h2>Tiga langkah untuk memulai percakapan yang berarti.</h2><p>Pengaduanmu disampaikan dengan sederhana. Kamu memegang pilihan atas informasi yang ingin dibagikan.</p></div><ol>{steps.map(([number, title, description]) => <li key={number}><span>{number}</span><div><h3>{title}</h3><p>{description}</p></div></li>)}</ol></div></section>
-    <section className="section form-section" id="pengaduan"><div className="container form-layout"><div><p className="eyebrow">FORMULIR RAHASIA</p><h2>Ceritakan dengan caramu sendiri.</h2><p>Isi bagian yang diperlukan. Kamu boleh mengirim laporan secara anonim dan hanya membagikan hal yang nyaman untuk diceritakan.</p><aside className="privacy-card"><strong>◈ Jaga informasi pribadimu</strong><p>Jangan menuliskan kata sandi, nomor identitas, atau informasi lain yang tidak diperlukan.</p></aside></div><div className="form-card"><ComplaintForm /></div></div></section>
-    <section className="section" id="lacak"><div className="container tracking"><div><p className="eyebrow">PELACAKAN LAPORAN</p><h2>Periksa perkembangan pengaduanmu.</h2><p>Fitur pelacakan tersedia setelah integrasi database PostgreSQL selesai dikonfigurasi.</p></div><a className="button secondary" href="#pengaduan">Buat pengaduan</a></div></section>
-  </main><footer><div className="container"><strong>◌ Ruang BK</strong><p>Identitas lembaga, kontak resmi, dan kebijakan layanan akan dilengkapi pengelola sebelum penggunaan publik.</p></div></footer></>;
+  return (
+    <ComplaintJourneyProvider>
+      <SiteHeader />
+      <main>
+        <section className="hero" id="utama">
+          <div className="hero-orb hero-orb-one" />
+          <div className="hero-orb hero-orb-two" />
+          <div className="container hero-grid">
+            <div className="hero-copy">
+              <p className="eyebrow"><span /> RUANG AMAN UNTUK BERCERITA</p>
+              <h1>Ada ruang untuk setiap <em>cerita.</em></h1>
+              <p className="lead">Sampaikan keluhan, kesulitan, atau hal yang sedang kamu hadapi. Layanan Bimbingan dan Konseling hadir untuk mendengarkan tanpa menghakimi.</p>
+              <div className="actions">
+                <a className="button button-primary" href="#pengaduan">Mulai bercerita <span aria-hidden="true">↗</span></a>
+                <a className="text-link" href="#cara-kerja"><span className="play-mark" aria-hidden="true">↓</span> Lihat cara kerja</a>
+              </div>
+              <div className="hero-assurances" aria-label="Fitur utama">
+                <span>✓ Tanpa akun</span>
+                <span>✓ Pilihan anonim</span>
+                <span>✓ Kode pelacakan</span>
+              </div>
+            </div>
+
+            <div className="hero-visual" aria-label="Ilustrasi ruang percakapan yang suportif">
+              <div className="visual-card visual-card-top"><span className="pulse-dot" /><p><strong>Kamu boleh bercerita</strong><small>Sesuai ritme dan kenyamananmu</small></p></div>
+              <div className="conversation-art">
+                <div className="window-light" />
+                <div className="plant"><i /><i /><i /></div>
+                <div className="person person-left"><span /><i /></div>
+                <div className="person person-right"><span /><i /></div>
+                <div className="table-art" />
+              </div>
+              <div className="visual-card visual-card-bottom"><span aria-hidden="true">♡</span><p><strong>Privasi dihormati</strong><small>Bagikan hanya yang kamu perlukan</small></p></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="trust-strip" aria-label="Prinsip layanan">
+          <div className="container trust-items">
+            <p><span>01</span><strong>Didengarkan</strong><small>Setiap cerita layak mendapat ruang.</small></p>
+            <p><span>02</span><strong>Dihormati</strong><small>Kamu memilih informasi yang dibagikan.</small></p>
+            <p><span>03</span><strong>Ditindaklanjuti</strong><small>Status dapat diperiksa dengan kode.</small></p>
+          </div>
+        </section>
+
+        <section className="section topics-section" id="layanan">
+          <div className="container">
+            <header className="section-heading">
+              <div><p className="eyebrow"><span /> MULAI DARI SINI</p><h2>Hal apa yang ingin kamu <em>sampaikan?</em></h2></div>
+              <p>Setiap pengalaman berbeda. Pilih topik yang paling mendekati ceritamu untuk langsung memulai formulir.</p>
+            </header>
+            <CategoryGrid />
+          </div>
+        </section>
+
+        <section className="section process-section" id="cara-kerja">
+          <div className="container process-grid">
+            <div className="process-copy">
+              <p className="eyebrow eyebrow-light"><span /> CARA KERJA</p>
+              <h2>Sederhana, jelas, dan tetap dalam kendalimu.</h2>
+              <p>Formulir memandu satu bagian pada satu waktu. Informasi tidak dinyatakan terkirim sebelum penyimpanan benar-benar berhasil.</p>
+              <a href="#pengaduan">Mulai pengaduan <span aria-hidden="true">→</span></a>
+            </div>
+            <ol className="process-list">
+              {steps.map(([number, title, description]) => (
+                <li key={number}><span>{number}</span><div><h3>{title}</h3><p>{description}</p></div></li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <section className="section form-section" id="pengaduan">
+          <div className="container form-layout">
+            <div className="form-intro">
+              <p className="eyebrow"><span /> FORMULIR PENGADUAN</p>
+              <h2>Ceritakan dengan <em>caramu sendiri.</em></h2>
+              <p>Kamu akan dipandu melalui empat langkah singkat. Isian yang sudah dibuat tetap berada di halaman jika pengiriman gagal.</p>
+              <aside className="privacy-card">
+                <span aria-hidden="true">⌁</span>
+                <div><strong>Pilihan anonim tersedia</strong><p>Jika diaktifkan, nama dan kontak dikosongkan di browser dan diabaikan lagi oleh server.</p></div>
+              </aside>
+              <p className="operational-note">Layanan ini bukan alat diagnosis atau respons darurat otomatis.</p>
+            </div>
+            <div className="form-card"><ComplaintForm /></div>
+          </div>
+        </section>
+
+        <section className="section tracking-section" id="lacak">
+          <div className="container tracking-shell">
+            <div className="tracking-copy"><p className="eyebrow eyebrow-light"><span /> LACAK PENGADUAN</p><h2>Tetap terhubung dengan ceritamu.</h2><p>Masukkan kode yang diterima setelah pengaduan berhasil disimpan. Hasil publik tidak menampilkan identitas atau isi ceritamu.</p></div>
+            <TrackingForm />
+          </div>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <div className="container footer-grid">
+          <div className="footer-brand"><span className="brand-mark">r</span><div><strong>Ruang BK</strong><small>Dengarkan · Pahami · Bantu</small></div></div>
+          <p>Identitas lembaga, kontak resmi, kebijakan privasi, dan jalur bantuan langsung perlu dilengkapi pengelola sebelum penggunaan publik.</p>
+          <a href="/api-reference">Referensi API <span aria-hidden="true">↗</span></a>
+        </div>
+      </footer>
+    </ComplaintJourneyProvider>
+  );
 }

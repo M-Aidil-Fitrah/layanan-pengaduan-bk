@@ -3,9 +3,9 @@
 import { useState } from "react";
 
 const navigationItems = [
-  { href: "#layanan", label: "Layanan" },
+  { href: "#layanan", label: "Topik" },
   { href: "#cara-kerja", label: "Cara kerja" },
-  { href: "#lacak", label: "Lacak laporan" },
+  { href: "#lacak", label: "Lacak pengaduan" },
 ] as const;
 
 export function SiteHeader() {
@@ -19,7 +19,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="container header-content">
         <a className="brand" href="#utama" onClick={closeNavigation}>
-          <span aria-hidden="true" className="brand-mark">◌</span>
+          <span aria-hidden="true" className="brand-mark">r</span>
           <span><strong>Ruang BK</strong><small>Dengarkan · Pahami · Bantu</small></span>
         </a>
         <button aria-controls="main-navigation" aria-expanded={isOpen} className="menu-toggle" onClick={() => setIsOpen((value) => !value)} type="button">
@@ -28,7 +28,7 @@ export function SiteHeader() {
         </button>
         <nav className={isOpen ? "main-navigation is-open" : "main-navigation"} id="main-navigation">
           {navigationItems.map((item) => <a href={item.href} key={item.href} onClick={closeNavigation}>{item.label}</a>)}
-          <a className="button button-small" href="#pengaduan" onClick={closeNavigation}>Buat pengaduan</a>
+          <a className="button button-small" href="#pengaduan" onClick={closeNavigation}>Mulai bercerita <span aria-hidden="true">↗</span></a>
         </nav>
       </div>
     </header>

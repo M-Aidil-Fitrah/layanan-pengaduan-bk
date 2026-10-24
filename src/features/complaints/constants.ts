@@ -1,10 +1,12 @@
 export const complaintCategories = [
-  { description: "Emosi, kepercayaan diri, atau keluarga.", icon: "◌", label: "Masalah pribadi", value: "PERSONAL" },
-  { description: "Belajar, motivasi, atau tugas.", icon: "⌁", label: "Masalah akademik", value: "ACADEMIC" },
-  { description: "Pertemanan, konflik, atau perundungan.", icon: "⌘", label: "Masalah sosial", value: "SOCIAL" },
-  { description: "Stres, cemas, atau kelelahan.", icon: "♡", label: "Kesejahteraan emosional", value: "EMOTIONAL_WELLBEING" },
-  { description: "Hal lain terkait layanan BK.", icon: "·", label: "Lainnya", value: "OTHER" },
+  { description: "Emosi, kepercayaan diri, atau situasi keluarga.", icon: "spark", label: "Masalah pribadi", value: "PERSONAL" },
+  { description: "Belajar, motivasi, tugas, atau adaptasi akademik.", icon: "book", label: "Masalah akademik", value: "ACADEMIC" },
+  { description: "Pertemanan, konflik, perundungan, atau lingkungan.", icon: "people", label: "Masalah sosial", value: "SOCIAL" },
+  { description: "Stres, cemas, lelah, atau perasaan yang mengganggu.", icon: "heart", label: "Kesejahteraan emosional", value: "EMOTIONAL_WELLBEING" },
+  { description: "Hal lain yang ingin kamu sampaikan kepada layanan BK.", icon: "dots", label: "Lainnya", value: "OTHER" },
 ] as const;
+
+export type ComplaintCategoryValue = (typeof complaintCategories)[number]["value"];
 
 export const reporterAudiences = [
   { label: "Siswa", value: "STUDENT" },
