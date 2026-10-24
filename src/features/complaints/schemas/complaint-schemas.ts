@@ -2,15 +2,15 @@ import { z } from "zod";
 
 export const complaintSubmissionSchema = z
   .object({
-    audience: z.enum(["STUDENT", "UNIVERSITY_STUDENT", "PARENT_OR_GUARDIAN", "OTHER"]),
-    category: z.enum(["PERSONAL", "ACADEMIC", "SOCIAL", "EMOTIONAL_WELLBEING", "OTHER"]),
+    audience: z.enum(["STUDENT", "UNIVERSITY_STUDENT", "PARENT_OR_GUARDIAN", "OTHER"], { error: "Pilih status pelapor." }),
+    category: z.enum(["PERSONAL", "ACADEMIC", "SOCIAL", "EMOTIONAL_WELLBEING", "OTHER"], { error: "Pilih kategori pengaduan." }),
     consent: z.literal(true, { error: "Persetujuan diperlukan sebelum pengaduan dikirim." }),
-    contact: z.string().trim().max(120).optional().or(z.literal("")),
+    contact: z.string().trim().max(120, "Kontak tidak boleh lebih dari 120 karakter.").optional().or(z.literal("")),
     details: z.string().trim().min(10, "Ceritakan masalahmu setidaknya dalam 10 karakter.").max(2_000, "Uraian pengaduan tidak boleh lebih dari 2.000 karakter."),
     isAnonymous: z.boolean(),
-    name: z.string().trim().max(120).optional().or(z.literal("")),
+    name: z.string().trim().max(120, "Nama tidak boleh lebih dari 120 karakter.").optional().or(z.literal("")),
     title: z.string().trim().min(1, "Judul pengaduan diperlukan.").max(100, "Judul pengaduan tidak boleh lebih dari 100 karakter."),
-    urgency: z.enum(["CONSULTATION", "SOON", "UNSAFE_NOW"]),
+    urgency: z.enum(["CONSULTATION", "SOON", "UNSAFE_NOW"], { error: "Pilih tingkat kebutuhan bantuan." }),
   })
   .transform((submission) => ({
     ...submission,
