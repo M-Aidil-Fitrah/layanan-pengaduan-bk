@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum ComplaintCategory {
@@ -33,17 +33,17 @@ enum ComplaintStatus {
 }
 
 model Complaint {
-  id           String           @id @default(cuid())
-  trackingCode String           @unique @db.VarChar(64)
+  id           String            @id @default(cuid())
+  trackingCode String            @unique @db.VarChar(64)
   category     ComplaintCategory
   audience     ReporterAudience
   urgency      UrgencyLevel
-  title        String           @db.VarChar(100)
-  details      String           @db.VarChar(2000)
+  title        String            @db.VarChar(100)
+  details      String            @db.VarChar(2000)
   isAnonymous  Boolean
-  name         String?          @db.VarChar(120)
-  contact      String?          @db.VarChar(120)
-  status       ComplaintStatus  @default(RECEIVED)
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  name         String?           @db.VarChar(120)
+  contact      String?           @db.VarChar(120)
+  status       ComplaintStatus   @default(RECEIVED)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
 }
