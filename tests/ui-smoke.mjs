@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { chromium } from "playwright-core";
 
 const baseUrl = process.env.BASE_URL ?? "http://localhost:3000";
+const databaseAvailable = process.env.EXPECT_DATABASE_AVAILABLE === "true";
 const browser = await chromium.launch({
   args: ["--disable-extensions"],
   executablePath: "/usr/bin/google-chrome",
@@ -92,7 +93,13 @@ try {
   await desktopPage.locator('.consent-card input[type="checkbox"]').check();
   assert.deepEqual(browserErrors, [], `Browser errors detected before submission:\n${browserErrors.join("\n")}`);
   await desktopPage.getByRole("button", { name: /Kirim pengaduan/ }).click();
-  await desktopPage.getByText(/Penyimpanan belum tersedia/).waitFor();
+
+  if (databaseAvailable) {
+    await desktopPage.getByRole("heading", { name: /Terima kasih sudah berani bercerita/ }).waitFor();
+    await desktopPage.locator(".tracking-code-box output").waitFor();
+  } else {
+    await desktopPage.getByText(/Penyimpanan belum tersedia/).waitFor();
+  }
 
   assert.ok(postedPayload, "Complaint request payload was not captured");
   assert.equal(postedPayload.isAnonymous, true);
@@ -105,7 +112,7 @@ try {
   await desktopPage.close();
 
   const unexpectedBrowserErrors = browserErrors.filter(
-    (message) => !message.includes("status of 503 (Service Unavailable)"),
+    (message) => databaseAvailable || !message.includes("status of 503 (Service Unavailable)"),
   );
   assert.deepEqual(unexpectedBrowserErrors, [], `Unexpected browser errors detected:\n${unexpectedBrowserErrors.join("\n")}`);
   console.log(JSON.stringify({ browserErrors: unexpectedBrowserErrors, viewportResults }, null, 2));
