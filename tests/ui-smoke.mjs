@@ -29,12 +29,26 @@ async function openPage(path, width, height) {
   await page.locator("h1").waitFor();
   await page.waitForTimeout(300);
 
-  const dimensions = await page.evaluate(() => ({
-    clientWidth: document.documentElement.clientWidth,
-    scrollWidth: document.documentElement.scrollWidth,
-  }));
+  const dimensions = await page.evaluate(() => {
+    const container = document.querySelector(".site-container");
+    const containerStyle = container ? window.getComputedStyle(container) : null;
+    const containerWidth = container?.getBoundingClientRect().width ?? 0;
+    const contentWidth = containerStyle
+      ? containerWidth - Number.parseFloat(containerStyle.paddingLeft) - Number.parseFloat(containerStyle.paddingRight)
+      : 0;
+
+    return {
+      clientWidth: document.documentElement.clientWidth,
+      containerWidth,
+      contentWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+    };
+  });
 
   assert.equal(dimensions.scrollWidth, dimensions.clientWidth, `Horizontal overflow at ${path} ${width}px`);
+  assert.ok(dimensions.containerWidth <= dimensions.clientWidth, `Layout exceeds viewport at ${path} ${width}px`);
+  assert.ok(dimensions.contentWidth < dimensions.clientWidth, `Layout has no side spacing at ${path} ${width}px`);
+  assert.ok(dimensions.contentWidth >= dimensions.clientWidth * 0.82, `Layout is too narrow at ${path} ${width}px`);
   return page;
 }
 
@@ -73,7 +87,7 @@ try {
   assert.match(await personalCategory.getAttribute("href"), /^\/pengaduan\?category=PERSONAL$/);
   await personalCategory.click();
   await categoryPage.waitForURL(/\/pengaduan\?category=PERSONAL$/);
-  assert.equal(await categoryPage.locator('input[name="category"][value="PERSONAL"]').isChecked(), true);
+  assert.equal(await categoryPage.locator("#complaint-category").inputValue(), "PERSONAL");
   await categoryPage.close();
 
   const formPage = await openPage("/pengaduan?category=PERSONAL", 1440, 1000);
@@ -86,8 +100,9 @@ try {
   });
 
   await formPage.getByRole("button", { name: /Lanjutkan/ }).click();
-  await formPage.locator('input[name="audience"][value="STUDENT"]').check();
-  await formPage.locator('input[name="urgency"][value="CONSULTATION"]').check();
+  await formPage.locator("#reporter-audience").selectOption("STUDENT");
+  await formPage.locator("#complaint-urgency").selectOption("CONSULTATION");
+  await formPage.screenshot({ fullPage: true, path: join(tmpdir(), "ruang-bk-form-dropdowns-1440.png") });
   await formPage.locator("#reporter-name").fill("Nama sementara");
   await formPage.locator("#reporter-contact").fill("kontak-sementara");
   await formPage.getByRole("switch", { name: /Kirim secara anonim/ }).check();
