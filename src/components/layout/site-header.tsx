@@ -1,14 +1,17 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const navigationItems = [
-  { href: "#layanan", label: "Topik" },
-  { href: "#cara-kerja", label: "Cara kerja" },
-  { href: "#lacak", label: "Lacak pengaduan" },
+  { href: "/", label: "Beranda" },
+  { href: "/pengaduan", label: "Buat pengaduan" },
+  { href: "/lacak", label: "Lacak status" },
 ] as const;
 
 export function SiteHeader() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   function closeNavigation() {
@@ -18,17 +21,24 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="container header-content">
-        <a className="brand" href="#utama" onClick={closeNavigation}>
-          <span aria-hidden="true" className="brand-mark">r</span>
-          <span><strong>Ruang BK</strong><small>Dengarkan · Pahami · Bantu</small></span>
-        </a>
+        <Link className="brand" href="/" onClick={closeNavigation}>
+          <span aria-hidden="true" className="brand-mark">R</span>
+          <span><strong>Ruang BK</strong><small>Layanan pengaduan</small></span>
+        </Link>
         <button aria-controls="main-navigation" aria-expanded={isOpen} className="menu-toggle" onClick={() => setIsOpen((value) => !value)} type="button">
           <span className="visually-hidden">{isOpen ? "Tutup" : "Buka"} menu</span>
-          <span aria-hidden="true">{isOpen ? "×" : "☰"}</span>
+          <span aria-hidden="true">{isOpen ? "Tutup" : "Menu"}</span>
         </button>
-        <nav className={isOpen ? "main-navigation is-open" : "main-navigation"} id="main-navigation">
-          {navigationItems.map((item) => <a href={item.href} key={item.href} onClick={closeNavigation}>{item.label}</a>)}
-          <a className="button button-small" href="#pengaduan" onClick={closeNavigation}>Mulai bercerita <span aria-hidden="true">↗</span></a>
+        <nav aria-label="Navigasi utama" className={isOpen ? "main-navigation is-open" : "main-navigation"} id="main-navigation">
+          {navigationItems.map((item) => {
+            const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+
+            return (
+              <Link aria-current={isActive ? "page" : undefined} href={item.href} key={item.href} onClick={closeNavigation}>
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
       </div>
     </header>

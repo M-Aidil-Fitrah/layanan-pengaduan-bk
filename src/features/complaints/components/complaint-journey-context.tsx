@@ -19,9 +19,15 @@ const ComplaintJourneyContext = createContext<ComplaintJourneyContextValue | nul
   null,
 );
 
-export function ComplaintJourneyProvider({ children }: { children: ReactNode }) {
+export function ComplaintJourneyProvider({
+  children,
+  initialCategory = "",
+}: {
+  children: ReactNode;
+  initialCategory?: ComplaintCategoryValue | "";
+}) {
   const [selectedCategory, setSelectedCategory] =
-    useState<ComplaintCategoryValue | "">("");
+    useState<ComplaintCategoryValue | "">(initialCategory);
 
   const value = useMemo(
     () => ({ selectedCategory, selectCategory: setSelectedCategory }),

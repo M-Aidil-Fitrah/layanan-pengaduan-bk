@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { type FormEvent, useState } from "react";
 
 import {
@@ -220,8 +221,7 @@ export function ComplaintForm() {
   if (trackingCode) {
     return (
       <section className="success" aria-live="polite">
-        <span className="success-mark" aria-hidden="true">✓</span>
-        <p className="eyebrow">PENGADUAN DITERIMA</p>
+        <p className="section-label">Pengaduan diterima</p>
         <h2>Terima kasih sudah berani bercerita.</h2>
         <p>Simpan kode berikut. Hanya orang yang memiliki kode ini yang dapat memeriksa status publik pengaduan.</p>
         <div className="tracking-code-box">
@@ -230,7 +230,7 @@ export function ComplaintForm() {
         </div>
         <div className="success-actions">
           <button className="button" onClick={copyTrackingCode} type="button">Salin kode</button>
-          <a className="button button-ghost" href="#lacak">Lacak status</a>
+          <Link className="button button-ghost" href="/lacak">Lacak status</Link>
         </div>
         {copyStatus ? <p className="copy-status">{copyStatus}</p> : null}
         <button className="text-button" onClick={startAnotherComplaint} type="button">Buat pengaduan lain</button>
