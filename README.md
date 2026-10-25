@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ruang BK — Layanan Pengaduan Bimbingan dan Konseling
 
-## Getting Started
+Aplikasi fullstack untuk menyampaikan pengaduan kepada layanan Bimbingan dan Konseling secara bertahap, dengan pilihan anonim dan kode pelacakan. Antarmuka dibangun mobile-first untuk ponsel, tablet, dan desktop.
 
-First, run the development server:
+## Stack
+
+- Next.js 16, React 19, dan TypeScript strict.
+- PostgreSQL dan Prisma 7 dengan adapter `pg`.
+- Zod untuk validasi client dan server.
+- REST API v1, OpenAPI 3.1, dan Scalar.
+- Tailwind CSS 4 sebagai pipeline CSS, dengan sistem desain aplikasi di `globals.css`.
+
+## Menjalankan secara lokal
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+cp .env.example .env
+pnpm install
+pnpm db:migrate
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ganti placeholder di `.env` dengan koneksi PostgreSQL lokal sebelum menjalankan migrasi. Buka `http://localhost:3000` untuk aplikasi dan `http://localhost:3000/api-reference` untuk referensi API.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Struktur utama
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+src/app/                         halaman dan Route Handler
+src/components/                  komponen layout bersama
+src/features/complaints/         UI, schema, service, dan repository pengaduan
+src/features/home/               komposisi halaman publik
+src/lib/                         database, respons API, dan OpenAPI
+prisma/                           schema serta migrasi PostgreSQL
+docs/backend.md                   panduan backend dan batas implementasi
+tests/                            pemeriksaan API dan browser
+```
 
-## Learn More
+## Pemeriksaan
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm lint
+pnpm typecheck
+pnpm build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Pemeriksaan API dan browser memerlukan server test yang sedang berjalan. Cara menjalankan serta environment yang dibutuhkan dijelaskan di [docs/backend.md](./docs/backend.md).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Batas saat ini
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Fitur publik pengiriman dan pelacakan terbatas sudah diimplementasikan. Area petugas, autentikasi, workflow status lanjutan, kebijakan privasi final, rate limiting, identitas lembaga, kontak resmi, dan prosedur darurat belum ditentukan sehingga tidak dibuat secara spekulatif.
