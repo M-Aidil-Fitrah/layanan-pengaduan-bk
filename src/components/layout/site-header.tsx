@@ -20,7 +20,7 @@ export function SiteHeader() {
 
   return (
     <header className="site-header">
-      <div className="container header-content">
+      <div className="site-container header-content">
         <Link className="brand" href="/" onClick={closeNavigation}>
           <span aria-hidden="true" className="brand-mark">R</span>
           <span><strong>Ruang BK</strong><small>Layanan pengaduan</small></span>

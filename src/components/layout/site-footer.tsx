@@ -3,7 +3,7 @@ import Link from "next/link";
 export function SiteFooter() {
   return (
     <footer className="site-footer">
-      <div className="container footer-grid">
+      <div className="site-container footer-grid">
         <div className="footer-brand">
           <span aria-hidden="true" className="brand-mark">R</span>
           <span><strong>Ruang BK</strong><small>Layanan pengaduan</small></span>

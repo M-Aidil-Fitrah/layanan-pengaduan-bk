@@ -9,14 +9,14 @@ export const complaintCategories = [
 export type ComplaintCategoryValue = (typeof complaintCategories)[number]["value"];
 
 export const reporterAudiences = [
-  { label: "Siswa", value: "STUDENT" },
-  { label: "Mahasiswa", value: "UNIVERSITY_STUDENT" },
-  { label: "Orang tua / wali", value: "PARENT_OR_GUARDIAN" },
-  { label: "Lainnya", value: "OTHER" },
+  { description: "Pelajar pada jenjang sekolah.", label: "Siswa", value: "STUDENT" },
+  { description: "Pelajar pada jenjang perguruan tinggi.", label: "Mahasiswa", value: "UNIVERSITY_STUDENT" },
+  { description: "Orang tua atau wali dari pelajar.", label: "Orang tua / wali", value: "PARENT_OR_GUARDIAN" },
+  { description: "Peran lain yang tidak tercantum.", label: "Lainnya", value: "OTHER" },
 ] as const;
 
 export const urgencyLevels = [
-  { label: "Ingin berkonsultasi", value: "CONSULTATION" },
-  { label: "Butuh bantuan dalam waktu dekat", value: "SOON" },
-  { label: "Merasa tidak aman saat ini", value: "UNSAFE_NOW" },
+  { description: "Saya ingin membicarakan situasi ini dengan layanan BK.", label: "Ingin berkonsultasi", value: "CONSULTATION" },
+  { description: "Saya membutuhkan tindak lanjut dalam waktu dekat.", label: "Butuh bantuan dalam waktu dekat", value: "SOON" },
+  { description: "Saya merasa keselamatan saya sedang terancam.", label: "Merasa tidak aman saat ini", value: "UNSAFE_NOW" },
 ] as const;

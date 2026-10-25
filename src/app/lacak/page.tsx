@@ -15,7 +15,7 @@ export default function TrackingPage() {
     <>
       <SiteHeader />
       <main className="inner-page tracking-page">
-        <div className="container tracking-page-layout">
+        <div className="site-container tracking-page-layout">
           <header className="tracking-intro">
             <Link className="back-link" href="/">← Kembali ke beranda</Link>
             <p className="section-label">Pelacakan pengaduan</p>

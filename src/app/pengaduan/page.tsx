@@ -16,7 +16,7 @@ export default function ComplaintPage() {
     <>
       <SiteHeader />
       <main className="inner-page form-page">
-        <div className="container form-page-shell">
+        <div className="site-container form-page-shell">
           <header className="form-page-header">
             <Link className="back-link" href="/">← Beranda</Link>
             <div>

@@ -16,7 +16,7 @@ export function HomePage() {
       <SiteHeader />
       <main>
         <section className="home-hero">
-          <div className="container home-hero-grid">
+          <div className="site-container home-hero-grid">
             <div className="home-hero-copy">
               <p className="section-label">Layanan pengaduan BK</p>
               <h1>Tempat menyampaikan hal yang perlu didengar.</h1>
@@ -34,7 +34,7 @@ export function HomePage() {
               <p>Setiap cerita dimulai dengan ruang untuk didengar.</p>
             </div>
           </div>
-          <div className="container service-principles" aria-label="Prinsip layanan">
+          <div className="site-container service-principles" aria-label="Prinsip layanan">
             <p><strong>Tanpa akun</strong><span>Pelapor dapat langsung mengisi formulir.</span></p>
             <p><strong>Pilihan anonim</strong><span>Nama dan kontak dapat dikosongkan.</span></p>
             <p><strong>Pelacakan mandiri</strong><span>Status publik diperiksa menggunakan kode.</span></p>
@@ -42,15 +42,15 @@ export function HomePage() {
         </section>
 
         <section className="home-section">
-          <div className="container split-heading">
+          <div className="site-container split-heading">
             <div><p className="section-label">Topik pengaduan</p><h2>Mulai dari hal yang paling dekat dengan ceritamu.</h2></div>
             <p>Kategori hanya membantu mengarahkan pengisian. Kamu tetap dapat menjelaskan situasinya dengan kata-katamu sendiri.</p>
           </div>
-          <div className="container"><CategoryGrid /></div>
+          <div className="site-container"><CategoryGrid /></div>
         </section>
 
         <section className="home-section process-block">
-          <div className="container process-layout">
+          <div className="site-container process-layout">
             <div>
               <p className="section-label">Cara kerja</p>
               <h2>Tiga bagian yang mudah dipahami.</h2>
@@ -65,7 +65,7 @@ export function HomePage() {
         </section>
 
         <section className="home-section privacy-section">
-          <div className="container privacy-layout">
+          <div className="site-container privacy-layout">
             <div><p className="section-label">Sebelum mengisi</p><h2>Bagikan informasi yang memang diperlukan.</h2></div>
             <div>
               <p>Hindari menulis kata sandi, nomor identitas, atau data pribadi lain yang tidak berkaitan dengan pengaduan. Mode anonim menghapus nama dan kontak dari payload serta penyimpanan.</p>

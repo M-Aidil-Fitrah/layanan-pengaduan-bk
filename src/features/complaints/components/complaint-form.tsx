@@ -89,6 +89,9 @@ export function ComplaintForm() {
 
   const currentCategory = selectedCategory || values.category;
   const progress = `${((step + 1) / stepLabels.length) * 100}%`;
+  const selectedCategoryDetails = complaintCategories.find((item) => item.value === currentCategory);
+  const selectedAudienceDetails = reporterAudiences.find((item) => item.value === values.audience);
+  const selectedUrgencyDetails = urgencyLevels.find((item) => item.value === values.urgency);
 
   function update<Key extends FormField>(key: Key, value: FormValues[Key]) {
     setValues((current) => ({ ...current, [key]: value }));
@@ -96,7 +99,7 @@ export function ComplaintForm() {
     setFormError("");
   }
 
-  function chooseCategory(category: ComplaintCategoryValue) {
+  function chooseCategory(category: ComplaintCategoryValue | "") {
     update("category", category);
     selectCategory(category);
   }
@@ -259,51 +262,71 @@ export function ComplaintForm() {
 
       <div className="form-step" key={step}>
         {step === 0 ? (
-          <fieldset>
+          <fieldset className="select-fieldset">
             <legend>Topik apa yang paling mendekati ceritamu?</legend>
-            <p className="field-help">Tidak harus sempurna—pilih yang terasa paling sesuai.</p>
-            <div className="option-grid category-options">
-              {complaintCategories.map((category) => (
-                <label className={currentCategory === category.value ? "option-card is-selected" : "option-card"} key={category.value}>
-                  <input checked={currentCategory === category.value} name="category" onChange={() => chooseCategory(category.value)} type="radio" value={category.value} />
-                  <span className="radio-indicator" />
-                  <strong>{category.label}</strong>
-                  <small>{category.description}</small>
-                </label>
-              ))}
-            </div>
+            <p className="field-help">Tidak harus sempurna. Pilih satu topik yang terasa paling sesuai.</p>
+            <label className="select-field" htmlFor="complaint-category">
+              <span>Topik pengaduan <small>Wajib</small></span>
+              <select
+                aria-describedby="category-help category-error"
+                aria-invalid={Boolean(errors.category)}
+                id="complaint-category"
+                onChange={(event) => chooseCategory(event.target.value as ComplaintCategoryValue | "")}
+                value={currentCategory}
+              >
+                <option value="">Pilih topik pengaduan</option>
+                {complaintCategories.map((category) => <option key={category.value} value={category.value}>{category.label}</option>)}
+              </select>
+            </label>
+            <p className="selection-help" id="category-help">
+              {selectedCategoryDetails?.description ?? "Pilihan ini membantu layanan BK memahami konteks awal pengaduanmu."}
+            </p>
             <FieldError id="category-error" message={currentCategory ? undefined : errors.category} />
           </fieldset>
         ) : null}
 
         {step === 1 ? (
           <div className="form-fields">
-            <fieldset>
-              <legend>Kamu mengisi sebagai siapa?</legend>
-              <div className="choice-row">
-                {reporterAudiences.map((audience) => (
-                  <label className={values.audience === audience.value ? "choice-pill is-selected" : "choice-pill"} key={audience.value}>
-                    <input checked={values.audience === audience.value} name="audience" onChange={() => update("audience", audience.value)} type="radio" value={audience.value} />
-                    <span>{audience.label}</span>
-                  </label>
-                ))}
+            <div className="form-grid form-grid-selects">
+              <div>
+                <label className="select-field" htmlFor="reporter-audience">
+                  <span>Kamu mengisi sebagai siapa? <small>Wajib</small></span>
+                  <select
+                    aria-describedby="audience-help audience-error"
+                    aria-invalid={Boolean(errors.audience)}
+                    id="reporter-audience"
+                    onChange={(event) => update("audience", event.target.value as AudienceValue)}
+                    value={values.audience}
+                  >
+                    <option value="">Pilih jenis pelapor</option>
+                    {reporterAudiences.map((audience) => <option key={audience.value} value={audience.value}>{audience.label}</option>)}
+                  </select>
+                </label>
+                <p className="selection-help" id="audience-help">{selectedAudienceDetails?.description ?? "Pilih peran yang paling sesuai dengan dirimu."}</p>
+                <FieldError id="audience-error" message={errors.audience} />
               </div>
-              <FieldError id="audience-error" message={errors.audience} />
-            </fieldset>
 
-            <fieldset>
-              <legend>Seberapa cepat kamu membutuhkan bantuan?</legend>
-              <div className="urgency-options">
-                {urgencyLevels.map((urgency) => (
-                  <label className={values.urgency === urgency.value ? "urgency-option is-selected" : "urgency-option"} key={urgency.value}>
-                    <input checked={values.urgency === urgency.value} name="urgency" onChange={() => update("urgency", urgency.value)} type="radio" value={urgency.value} />
-                    <span className="radio-indicator" />
-                    <span><strong>{urgency.label}</strong>{urgency.value === "UNSAFE_NOW" ? <small>Pilihan ini tidak mengaktifkan respons darurat otomatis.</small> : null}</span>
-                  </label>
-                ))}
+              <div>
+                <label className="select-field" htmlFor="complaint-urgency">
+                  <span>Seberapa cepat bantuan dibutuhkan? <small>Wajib</small></span>
+                  <select
+                    aria-describedby="urgency-help urgency-error"
+                    aria-invalid={Boolean(errors.urgency)}
+                    id="complaint-urgency"
+                    onChange={(event) => update("urgency", event.target.value as UrgencyValue)}
+                    value={values.urgency}
+                  >
+                    <option value="">Pilih tingkat kebutuhan</option>
+                    {urgencyLevels.map((urgency) => <option key={urgency.value} value={urgency.value}>{urgency.label}</option>)}
+                  </select>
+                </label>
+                <p className={values.urgency === "UNSAFE_NOW" ? "selection-help is-warning" : "selection-help"} id="urgency-help">
+                  {selectedUrgencyDetails?.description ?? "Pilih berdasarkan kondisi yang kamu rasakan saat ini."}
+                  {values.urgency === "UNSAFE_NOW" ? " Form ini tidak mengaktifkan respons darurat otomatis." : ""}
+                </p>
+                <FieldError id="urgency-error" message={errors.urgency} />
               </div>
-              <FieldError id="urgency-error" message={errors.urgency} />
-            </fieldset>
+            </div>
 
             <div className="identity-panel">
               <label className="switch-row">
