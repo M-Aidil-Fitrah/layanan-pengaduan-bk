@@ -15,8 +15,24 @@ const browser = await chromium.launch({
 const browserErrors = [];
 const viewportResults = [];
 
-async function openPage(path, width, height) {
+async function openPage(path, width, height, injectBodyAttribute = false) {
   const page = await browser.newPage({ viewport: { width, height } });
+
+  if (injectBodyAttribute) {
+    await page.route("**/*", async (route) => {
+      if (route.request().resourceType() !== "document") {
+        await route.continue();
+        return;
+      }
+
+      const response = await route.fetch();
+      const html = await response.text();
+      await route.fulfill({
+        body: html.replace("<body", '<body cz-shortcut-listen="true"'),
+        response,
+      });
+    });
+  }
 
   page.on("console", (message) => {
     if (message.type() === "error") {
@@ -134,6 +150,10 @@ try {
   await trackingPage.getByRole("button", { name: "Periksa status" }).click();
   await trackingPage.getByText(/Masukkan kode pengaduan yang lengkap/).waitFor();
   await trackingPage.close();
+
+  const extensionMutationPage = await openPage("/pengaduan", 1440, 1000, true);
+  assert.equal(await extensionMutationPage.locator("body").getAttribute("cz-shortcut-listen"), "true");
+  await extensionMutationPage.close();
 
   const unexpectedBrowserErrors = browserErrors.filter(
     (message) => databaseAvailable || !message.includes("status of 503 (Service Unavailable)"),
